@@ -1,6 +1,6 @@
-
 import pandas as pd
 import streamlit as st
+
 from src.ml_impact import evaluate_ml_impact
 from src.anomaly_detection import detect_anomalies
 from src.controlled_repair import controlled_repair
@@ -9,6 +9,7 @@ from src.profiling import profile_dataframe
 from src.quality_metrics import calculate_quality_metrics
 from src.repair import propose_repairs
 from src.validation import validate_dataframe
+from src.demo_data import make_demo_dataset
 
 
 st.set_page_config(
@@ -62,19 +63,11 @@ if uploaded is not None:
         st.error(f"Could not read this CSV: {exc}")
         st.stop()
 else:
-    original = pd.DataFrame({
-        "age": [24, 31, 29, 42, 36, 27, 51, 33, 40, 28],
-        "income": [
-            32000, 54000, 48000, 83000, 69000,
-            41000, 97000, 58000, 76000, 45000,
-        ],
-        "visits": [2, 4, 3, 7, 5, 2, 8, 4, 6, 3],
-        "label": [0, 1, 0, 1, 1, 0, 1, 0, 1, 0],
-    })
+    original = make_demo_dataset()
 
     st.info(
-        "Using the built-in demonstration dataset. "
-        "Upload a CSV from the sidebar to explore your own data."
+        "Using the built-in 120-row synthetic demo dataset. "
+        "Choose a corruption scenario to explore the full workflow."
     )
 
 
@@ -470,6 +463,7 @@ if "recoverai_repaired_df" in st.session_state:
             use_container_width=True,
         )
 
+
 # --------------------------------------------------
 # 7. Machine Learning Impact Evaluation
 # --------------------------------------------------
@@ -512,6 +506,11 @@ else:
     selected_target = st.selectbox(
         "Select numeric target column",
         options=target_candidates,
+        index=(
+            target_candidates.index("spend")
+            if "spend" in target_candidates
+            else 0
+        ),
         key="ml_target_column",
     )
 
@@ -617,10 +616,10 @@ if "recoverai_ml_summary" in st.session_state:
         key="download_ml_details",
     )
 
-
     # --------------------------------------------------
     # Research visualizations
     # --------------------------------------------------
+
     st.subheader("Research Visualizations")
 
     chart_left, chart_right = st.columns(2)
@@ -652,6 +651,7 @@ if "recoverai_ml_summary" in st.session_state:
     # --------------------------------------------------
     # Data-quality before/after visualization
     # --------------------------------------------------
+
     if (
         "recoverai_repair_input" in st.session_state
         and "recoverai_repaired_df" in st.session_state
@@ -678,6 +678,7 @@ if "recoverai_ml_summary" in st.session_state:
                 "Rows": len(repaired_df),
             },
         })
+
         st.dataframe(
             quality_comparison.round(2),
             use_container_width=True,
@@ -698,12 +699,19 @@ if "recoverai_ml_summary" in st.session_state:
     # --------------------------------------------------
     # Downloadable research report
     # --------------------------------------------------
+
     st.subheader("Experiment Report")
 
     target_name = st.session_state.get("recoverai_ml_target", "not recorded")
     scenario_name = st.session_state.get("recoverai_ml_scenario", "not recorded")
     intensity_value = st.session_state.get("recoverai_ml_intensity", "not recorded")
-    n_evaluated_runs = int(ml_details["run"].nunique()) if "run" in ml_details else 0
+
+    n_evaluated_runs = (
+        int(ml_details["run"].nunique())
+        if "run" in ml_details
+        else 0
+    )
+
     test_rows_summary = (
         int(ml_details["test_rows"].min())
         if "test_rows" in ml_details and not ml_details.empty
@@ -767,6 +775,7 @@ if "recoverai_ml_summary" in st.session_state:
     ])
 
     report_text = "\n".join(report_lines)
+
     st.download_button(
         "Download experiment report (Markdown)",
         data=report_text.encode("utf-8"),

@@ -1,5 +1,4 @@
-# RecoveryAI
-# RecoverAI — Data Quality, Repair & ML Impact Evaluation
+﻿# RecoverAI â€” Data Quality, Repair & ML Impact Evaluation
 
 **An interactive data-quality analysis and controlled-repair platform for investigating how data corruption affects machine-learning performance.**
 
@@ -10,6 +9,15 @@ The project focuses on an important question:
 > Does improving data quality necessarily improve machine-learning performance?
 
 RecoverAI investigates this question through reproducible experiments and matched model evaluations rather than assuming that every repair is beneficial.
+## Project Screenshots
+
+![RecoverAI dashboard overview](assets/dashboard-overview.png)
+
+![RecoverAI data quality profile](assets/data-quality-profile.png)
+
+![RecoverAI controlled repair results](assets/repair-results.png)
+
+![RecoverAI ML impact evaluation](assets/ml-impact-1.png)
 
 ## Key Features
 
@@ -48,11 +56,11 @@ RecoverAI investigates this question through reproducible experiments and matche
 ### 1. Clone the repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/hrudayesh43/RecoveryAI.git
 cd RecoverAI
 ```
 
-Replace the placeholder with your actual repository URL.
+
 
 ### 2. Create a virtual environment
 
@@ -110,7 +118,7 @@ For fair comparison, the experimental workflow is designed to use matched held-o
 
 One recorded experiment used the `Price` column as the prediction target, a missing-value corruption setting of 10%, and five repeated runs.
 
-| Strategy | Mean MAE | Mean R² |
+| Strategy | Mean MAE | Mean RÂ² |
 |---|---:|---:|
 | Mean-prediction baseline | 2441.41 | -0.0006 |
 | Original-data reference | 2520.93 | -0.1352 |
@@ -168,3 +176,4 @@ Rather than assuming that repaired data is always better for every predictive ta
 **Author:** Hrudayesh Koyya
 
 **License:** To be specified before public release.
+

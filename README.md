@@ -1,4 +1,4 @@
-﻿# RecoverAI- Data Quality, Repair & ML Impact Evaluation
+﻿# RecoverAI - Data Quality, Repair & ML Impact Evaluation
 
 **An interactive data-quality analysis and controlled-repair platform for investigating how data corruption affects machine-learning performance.**
 
